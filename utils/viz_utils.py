@@ -74,8 +74,23 @@ def plot_train_val_history(train_loss_history, val_loss_history, plot_dir, args)
     - Plots the train and validation loss curves.
     - Saves the plot as a JPG file in the specified directory.
     '''
+    # Create a range of epoch numbers
+    epochs = range(1, len(train_loss_history) + 1)
 
-    pass
+    # Plot the training and validation loss curves
+    plt.figure(figsize=(10, 6))
+    plt.plot(epochs, train_loss_history, label='Training Loss', color='blue')
+    plt.plot(epochs, val_loss_history, label='Validation Loss', color='red')
+    plt.xlabel('Epoch')
+    plt.ylabel('Loss')
+    plt.title('Training and Validation Loss Curves')
+    plt.legend()
+
+    # Save the plot as a JPEG file
+    plt.tight_layout()
+    plt.savefig(os.path.join(plot_dir, f'{args.exp_id}_loss_curve.jpg'))
+    plt.close()
+
 
 def plot_metric(x, label, plot_dir, args, metric):
     '''
@@ -92,4 +107,18 @@ def plot_metric(x, label, plot_dir, args, metric):
     - Plots the given metric curve.
     - Saves the plot as a JPEG file in the specified directory.
     '''
-    pass
+    # Create a range of epoch numbers
+    epochs = range(1, len(x) + 1)
+
+    # Plot the metric curve
+    plt.figure(figsize=(10, 6))
+    plt.plot(epochs, x, label=label, color='blue')
+    plt.xlabel('Epoch')
+    plt.ylabel(label)
+    plt.title(f'{label} Curve')
+    plt.legend()
+
+    # Save the plot as a JPEG file
+    plt.tight_layout()
+    plt.savefig(os.path.join(plot_dir, f'{args.exp_id}_{metric}_curve.jpg'))
+    plt.close()
