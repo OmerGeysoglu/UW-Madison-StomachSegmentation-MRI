@@ -116,7 +116,12 @@ def train_one_epoch(model, train_loader, val_loader, train_loss_history, val_los
 
         val_loss /= len(val_loader)
         val_loss_history.append(val_loss)
-        dice_coef_history.append(1 - val_loss)
+        
+        # Calculate Dice coefficient using DiceLoss
+        dice_loss = DiceLoss()
+        dice_coeff = 1 - dice_loss(outputs, masks)
+        dice_coef_history.append(dice_coeff)
+        
     
     # print train and val losses and dice coefficient
     print(f"Epoch: {epoch+1}, Train Loss: {train_loss:.4f}, Val Loss: {val_loss:.4f}, Dice Coeff: {1 - val_loss:.4f}")
@@ -154,7 +159,7 @@ if __name__ == '__main__':
     optimizer = torch.optim.Adam(model.parameters(), lr=args.lr)
 
     # Use Dice loss as criterion 
-    criterion = DiceLoss()
+    criterion = torch.nn.BCEWithLogitsLoss()
 
     train_model(model=model,
                 train_loader=train_loader,
