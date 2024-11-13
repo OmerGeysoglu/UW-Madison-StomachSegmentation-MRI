@@ -1,6 +1,9 @@
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
+import sys
+import os
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../model/')))
 from blocks import DoubleConv, DownSampling, UpSampling, CropAndConcat
 
 class UNet(nn.Module):
@@ -17,7 +20,7 @@ class UNet(nn.Module):
         (This function is optional to use)
         '''
         super(UNet, self).__init__()
-
+        
         self.encoder = nn.ModuleList([
             DoubleConv(in_channels, 64),
             DoubleConv(64, 128),
