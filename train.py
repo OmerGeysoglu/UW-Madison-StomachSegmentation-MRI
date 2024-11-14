@@ -9,7 +9,8 @@ from model.unet import UNet
 from utils.model_utils import train_arg_parser, set_seed
 from utils.data_utils import MadisonStomach
 from utils.viz_utils import visualize_predictions, plot_train_val_history, plot_metric
-from utils.metric_utils import DiceLoss
+from losses.dice_loss import DiceLoss
+from losses.focal_loss import FocalLoss
 
 
 def train_model(model, train_loader, val_loader, optimizer, criterion, args, save_path):
@@ -117,10 +118,10 @@ def train_one_epoch(model, train_loader, val_loader, train_loss_history, val_los
         val_loss /= len(val_loader)
         val_loss_history.append(val_loss)
         
-        # Calculate Dice coefficient using DiceLoss
-        dice_loss = DiceLoss()
-        dice_coeff = 1 - dice_loss(outputs, masks)
-        dice_coef_history.append(dice_coeff)
+        # # Calculate Dice coefficient using DiceLoss
+        # dice_loss = DiceLoss()
+        # dice_coeff = 1 - dice_loss(outputs, masks)
+        # dice_coef_history.append(dice_coeff)
         
     
     # print train and val losses and dice coefficient
@@ -156,10 +157,10 @@ if __name__ == '__main__':
     model.to(args.device)
 
     # Optimizer and loss function
-    optimizer = torch.optim.Adam(model.parameters(), lr=args.lr)
+    optimizer = torch.optim.SGD(model.parameters(), lr=args.lr)
 
     # Use Dice loss as criterion 
-    criterion = torch.nn.BCEWithLogitsLoss()
+    criterion = DiceLoss()
 
     train_model(model=model,
                 train_loader=train_loader,
