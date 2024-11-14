@@ -57,7 +57,7 @@ class DiceLoss(nn.Module):
         dice = (2. * intersection + self.smooth) / (union + self.smooth)
         
         # Calculate the Dice Loss as 1 - Dice Score
-        dice_loss = 1. - dice.item()
+        dice_loss = 1. - dice
         
         # Return the Dice Loss as a tensor
         return dice_loss
