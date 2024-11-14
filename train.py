@@ -11,6 +11,7 @@ from utils.data_utils import MadisonStomach
 from utils.viz_utils import visualize_predictions, plot_train_val_history, plot_metric
 from losses.dice_loss import DiceLoss
 from losses.focal_loss import FocalLoss
+from losses.bce_dice_loss import BCEDiceLoss
 
 
 def train_model(model, train_loader, val_loader, optimizer, criterion, args, save_path):
@@ -95,18 +96,19 @@ def train_one_epoch(model, train_loader, val_loader, train_loss_history, val_los
         optimizer.zero_grad()
         outputs = model(images)
         loss = criterion(outputs, masks)
-        
-
-        train_loss += loss.item()
 
         loss.backward()
         optimizer.step()
+
+        train_loss += loss.item()
         
     train_loss /= len(train_loader)
     train_loss_history.append(train_loss)
 
     model.eval()
     val_loss = 0.0
+    dice_loss_fn = DiceLoss()
+    dice_coef = 0.0
 
     with torch.no_grad():
         for i, (images, masks) in enumerate(tqdm(val_loader)):
@@ -114,14 +116,12 @@ def train_one_epoch(model, train_loader, val_loader, train_loss_history, val_los
             outputs = model(images)
             loss = criterion(outputs, masks)
             val_loss += loss.item()
+            dice_coef += 1 - dice_loss_fn(outputs, masks)
 
         val_loss /= len(val_loader)
         val_loss_history.append(val_loss)
-        
-        # # Calculate Dice coefficient using DiceLoss
-        # dice_loss = DiceLoss()
-        # dice_coeff = 1 - dice_loss(outputs, masks)
-        # dice_coef_history.append(dice_coeff)
+        avg_dice_coef = dice_coef / len(val_loader)
+        dice_coef_history.append(avg_dice_coef)
         
     
     # print train and val losses and dice coefficient
@@ -130,8 +130,6 @@ def train_one_epoch(model, train_loader, val_loader, train_loss_history, val_los
     # Visualize predictions
     if (epoch + 1) % 5 == 0:
         visualize_predictions(images, masks, outputs, save_path, epoch, i)
-    
-    return train_loss_history, val_loss_history, dice_coef_history
 
 
 if __name__ == '__main__':
@@ -160,7 +158,7 @@ if __name__ == '__main__':
     optimizer = torch.optim.SGD(model.parameters(), lr=args.lr)
 
     # Use Dice loss as criterion 
-    criterion = DiceLoss()
+    criterion = BCEDiceLoss()
 
     train_model(model=model,
                 train_loader=train_loader,
