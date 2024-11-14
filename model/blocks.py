@@ -3,15 +3,22 @@ import torch.nn as nn
 import torch.nn.functional as F
 
 class DoubleConv(nn.Module):
-    def __init__(self, in_channels: int, out_channels: int):
+    def __init__(self, in_channels: int, out_channels: int, dropout_prob: float = 0.0):
         super(DoubleConv, self).__init__()
         self.conv1 = nn.Conv2d(in_channels, out_channels, kernel_size=3, padding=1)
+        self.bn1 = nn.BatchNorm2d(out_channels)
         self.conv2 = nn.Conv2d(out_channels, out_channels, kernel_size=3, padding=1)
+        self.bn2 = nn.BatchNorm2d(out_channels)
         self.relu = nn.ReLU()
+        self.dropout = nn.Dropout(dropout_prob) if dropout_prob > 0 else None
 
     def forward(self, x):
-        x = self.relu(self.conv1(x))
-        x = self.relu(self.conv2(x))
+        x = self.relu(self.bn1(self.conv1(x)))
+        if self.dropout: 
+            x = self.dropout(x)
+        x = self.relu(self.bn2(self.conv2(x)))
+        if self.dropout:
+            x = self.dropout(x)
         return x
 
 class DownSampling(nn.Module):
