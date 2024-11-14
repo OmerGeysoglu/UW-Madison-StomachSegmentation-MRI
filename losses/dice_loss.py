@@ -34,15 +34,15 @@ class DiceLoss(nn.Module):
         Returns:
         - torch.Tensor: Dice Loss value.
         '''
-        # Apply sigmoid to predictions
-        preds = torch.sigmoid(preds)
 
         # make sure the tensors are contiguous
         # This is necessary for the view operation to work
         # https://pytorch.org/docs/stable/tensors.html#torch.Tensor.view
         preds = preds.contiguous()
         targets = targets.contiguous()
-  
+
+        preds = torch.sigmoid(preds)
+
         # Flatten preds and targets
         preds = preds.view(-1)
         targets = targets.view(-1)
@@ -57,7 +57,7 @@ class DiceLoss(nn.Module):
         dice = (2. * intersection + self.smooth) / (union + self.smooth)
         
         # Calculate the Dice Loss as 1 - Dice Score
-        dice_loss = 1. - dice
+        dice_loss = 1. - dice.item()
         
         # Return the Dice Loss as a tensor
         return dice_loss
