@@ -112,6 +112,7 @@ def plot_metric(x, label, plot_dir, args, metric):
 
     # Plot the metric curve
     plt.figure(figsize=(10, 6))
+    x = x.cpu().numpy()
     plt.plot(epochs, x, label=label, color='blue')
     plt.xlabel('Epoch')
     plt.ylabel(label)
