@@ -50,13 +50,12 @@ def train_model(model, train_loader, val_loader, optimizer, criterion, args, sav
                         dice_coef_history, 
                         optimizer, 
                         criterion, 
-
                         args, 
                         epoch, 
                         save_path)
         
         if (epoch + 1) % 5 == 0:
-            torch.save(model, os.path.join(save_path, args.exp_id, 'model', f'unet_{epoch}.pt'))
+            torch.save(model.state_dict(), os.path.join(save_path, args.exp_id, 'model', f'unet_{epoch}.pt'))
 
     plot_train_val_history(train_loss_history, val_loss_history, save_path, args)
     plot_metric(dice_coef_history, label="dice coeff", plot_dir=save_path, args=args, metric='dice_coeff')
@@ -118,7 +117,7 @@ def train_one_epoch(model, train_loader, val_loader, train_loss_history, val_los
             val_loss += loss.item()
             dice_coef += 1 - dice_loss_fn(outputs, masks)
 
-            if i % 10 == 0:
+            if i % 20 == 0:
                 visualize_predictions(images, masks, outputs, save_path, epoch+1, i)
 
         val_loss /= len(val_loader)
@@ -140,7 +139,7 @@ if __name__ == '__main__':
     dataset = MadisonStomach(data_path="madison-stomach-data", mode=args.mode)
 
     # Define train and val indices
-    # Define Subsets of to create trian and validation dataset
+    # Define Subsets to create train and validation dataset
     train_indices, val_indices = train_test_split(list(range(len(dataset))), test_size=0.2, train_size=0.8, random_state=42)
     train_subset = Subset(dataset, train_indices)
     val_subset = Subset(dataset, val_indices)
@@ -154,10 +153,10 @@ if __name__ == '__main__':
     model.to(args.device)
 
     # Optimizer and loss function
-    optimizer = torch.optim.Adam(model.parameters(), lr=args.lr)
+    optimizer = torch.optim.SGD(model.parameters(), lr=args.lr)
 
     # Use Dice loss as criterion 
-    criterion = torch.nn.BCEWithLogitsLoss()
+    criterion = DiceLoss()
 
     train_model(model=model,
                 train_loader=train_loader,
