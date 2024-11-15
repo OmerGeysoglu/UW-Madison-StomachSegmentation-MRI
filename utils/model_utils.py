@@ -47,10 +47,10 @@ def train_arg_parser():
     parser.add_argument('--lr', type=float, default=3e-3)  # Corrected default from string to float
     
     # Batch size for training
-    parser.add_argument('--bs', type=int, default=10)
+    parser.add_argument('--bs', type=int, default=5)
     
     # Number of epochs for training
-    parser.add_argument('--epoch', type=int, default=20)
+    parser.add_argument('--epoch', type=int, default=15)
     
     # Mode for running the script (e.g., 'train' or 'test')
     parser.add_argument('--mode', type=str, default='train')
