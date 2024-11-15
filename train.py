@@ -118,6 +118,9 @@ def train_one_epoch(model, train_loader, val_loader, train_loss_history, val_los
             val_loss += loss.item()
             dice_coef += 1 - dice_loss_fn(outputs, masks)
 
+            if i % 10 == 0:
+                visualize_predictions(images, masks, outputs, save_path, epoch+1, i)
+
         val_loss /= len(val_loader)
         val_loss_history.append(val_loss)
         avg_dice_coef = dice_coef / len(val_loader)
@@ -125,11 +128,7 @@ def train_one_epoch(model, train_loader, val_loader, train_loss_history, val_los
         
     
     # print train and val losses and dice coefficient
-    print(f"Epoch: {epoch+1}, Train Loss: {train_loss:.4f}, Val Loss: {val_loss:.4f}, Dice Coeff: {1 - val_loss:.4f}")
-
-    # Visualize predictions
-    if (epoch + 1) % 5 == 0:
-        visualize_predictions(images, masks, outputs, save_path, epoch, i)
+    print(f"Epoch: {epoch+1}, Train Loss: {train_loss:.4f}, Val Loss: {val_loss:.4f}, Dice Coeff: {avg_dice_coef:.4f}")
 
 
 if __name__ == '__main__':
@@ -155,10 +154,10 @@ if __name__ == '__main__':
     model.to(args.device)
 
     # Optimizer and loss function
-    optimizer = torch.optim.SGD(model.parameters(), lr=args.lr)
+    optimizer = torch.optim.Adam(model.parameters(), lr=args.lr)
 
     # Use Dice loss as criterion 
-    criterion = BCEDiceLoss()
+    criterion = torch.nn.BCEWithLogitsLoss()
 
     train_model(model=model,
                 train_loader=train_loader,
