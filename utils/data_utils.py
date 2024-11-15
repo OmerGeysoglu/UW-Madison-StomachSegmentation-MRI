@@ -65,7 +65,7 @@ class MadisonStomach(Dataset):
         '''
         # Load the image and mask using OpenCV (image in grayscale, mask with unchanged properties)
         img = cv2.imread(self.image_paths[index], cv2.IMREAD_GRAYSCALE).astype(np.float32) / 255.0
-        mask = cv2.imread(self.mask_paths[index], cv2.IMREAD_GRAYSCALE).astype(np.float32) / 255.0
+        mask = cv2.imread(self.mask_paths[index], cv2.IMREAD_UNCHANGED).astype(np.float32) / 255.0
         
         # Apply transformations to the image and mask
         img = self.transform(img)
