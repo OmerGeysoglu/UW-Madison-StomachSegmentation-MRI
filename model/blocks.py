@@ -10,16 +10,12 @@ class DoubleConv(nn.Module):
         self.conv2 = nn.Conv2d(out_channels, out_channels, kernel_size=3, padding=1)
         self.bn2 = nn.BatchNorm2d(out_channels)
         self.relu = nn.ReLU()
-        self.dropout = nn.Dropout(dropout_prob) if dropout_prob > 0 else None
         
 
     def forward(self, x):
         x = self.relu(self.bn1(self.conv1(x)))
-        if self.dropout: 
-            x = self.dropout(x)
         x = self.relu(self.bn2(self.conv2(x)))
-        if self.dropout:
-            x = self.dropout(x)
+
         return x
 
 class DownSampling(nn.Module):
@@ -49,5 +45,5 @@ class CropAndConcat(nn.Module):
         diffX = x1.size()[3] - x2.size()[3]
         padding = (diffX // 2, diffX - diffX // 2, diffY // 2, diffY - diffY // 2)
         x2 = F.pad(x2, padding)
-        x = torch.cat([x2, x1], dim=1)
+        x = torch.cat([x1, x2], dim=1)
         return x
