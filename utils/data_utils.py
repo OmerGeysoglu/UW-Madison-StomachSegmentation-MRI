@@ -7,6 +7,7 @@ import matplotlib.pyplot as plt
 from typing import Any
 from torch.utils.data import Dataset
 from torchvision import transforms
+from PIL import Image
 
 class MadisonStomach(Dataset):
     '''
@@ -64,8 +65,12 @@ class MadisonStomach(Dataset):
         - mask (Tensor): Transformed mask tensor.
         '''
         # Load the image and mask using OpenCV (image in grayscale, mask with unchanged properties)
-        img = cv2.imread(self.image_paths[index], cv2.IMREAD_GRAYSCALE).astype(np.float32) / 255.0
-        mask = cv2.imread(self.mask_paths[index], cv2.IMREAD_UNCHANGED).astype(np.float32) / 255.0
+        img = cv2.imread(self.image_paths[index], cv2.IMREAD_GRAYSCALE)
+        mask = cv2.imread(self.mask_paths[index], cv2.IMREAD_UNCHANGED)
+
+         # Convert numpy arrays to PIL Images for compatibility with torchvision transforms
+        img = Image.fromarray(img)
+        mask = Image.fromarray(mask)
         
         # Apply transformations to the image and mask
         img = self.transform(img)
