@@ -153,10 +153,10 @@ if __name__ == '__main__':
     model.to(args.device)
 
     # Optimizer and loss function
-    optimizer = torch.optim.SGD(model.parameters(), lr=args.lr)
+    optimizer = torch.optim.Adam(model.parameters(), lr=args.lr)
 
     # Use Dice loss as criterion 
-    criterion = DiceLoss()
+    criterion = torch.nn.BCEWithLogitsLoss()
 
     train_model(model=model,
                 train_loader=train_loader,
