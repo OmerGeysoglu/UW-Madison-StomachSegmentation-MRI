@@ -4,7 +4,6 @@ import os
 import glob
 import numpy as np
 import matplotlib.pyplot as plt
-from typing import Any
 from torch.utils.data import Dataset
 from torchvision import transforms
 from PIL import Image
