@@ -31,7 +31,7 @@ class MadisonStomach(Dataset):
         self.mask_paths  = sorted(glob.glob(os.path.join(data_path, mode, '*mask*.png')))
         
         # Ensure the number of images and masks match
-        assert len(self.image_paths) == len(self.mask_paths)
+        assert len(self.image_paths) == len(self.mask_paths), "Number of images and masks do not match"
 
         # Define transformations for images and masks: convert to tensor and resize to 256x256
         self.transform = transforms.Compose([transforms.ToTensor(), transforms.Resize((256, 256))])
