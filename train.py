@@ -34,8 +34,10 @@ def train_model(model, train_loader, val_loader, optimizer, criterion, args, sav
     - Saves model checkpoints every 5 epochs.
     - Plots the training and validation loss curves and the Dice coefficient curve.
     '''
-    os.makedirs(os.path.join(save_path, args.exp_id), exist_ok=True)
-    os.makedirs(os.path.join(save_path, args.exp_id, 'model'), exist_ok=True)
+    os.makedirs(save_path, exist_ok=True)
+    os.makedirs(os.path.join(save_path, 'model'), exist_ok=True)
+    os.makedirs(os.path.join(save_path, 'pred_images'), exist_ok=True)
+    os.makedirs(os.path.join(save_path, 'plots'), exist_ok=True)
 
     train_loss_history = []
     val_loss_history = []
@@ -55,7 +57,7 @@ def train_model(model, train_loader, val_loader, optimizer, criterion, args, sav
                         save_path)
         
         if (epoch + 1) % 5 == 0:
-            torch.save(model.state_dict(), os.path.join(save_path, args.exp_id, 'model', f'unet_{epoch}.pt'))
+            torch.save(model.state_dict(), os.path.join(save_path, 'model', f'unet_{epoch}.pt'))
 
     plot_train_val_history(train_loss_history, val_loss_history, save_path, args)
     plot_metric(dice_coef_history, label="dice coeff", plot_dir=save_path, args=args, metric='dice_coeff')
@@ -132,7 +134,7 @@ def train_one_epoch(model, train_loader, val_loader, train_loss_history, val_los
 
 if __name__ == '__main__':
     args = train_arg_parser()
-    save_path = "results/"
+    save_path = os.path.join("results", args.exp_id)
     set_seed(42)
 
     #Define dataset
