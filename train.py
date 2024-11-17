@@ -119,7 +119,7 @@ def train_one_epoch(model, train_loader, val_loader, train_loss_history, val_los
             val_loss += loss.item()
             dice_coef += 1 - dice_loss_fn(outputs, masks)
 
-            if i % 20 == 0:
+            if i % 50 == 0:
                 visualize_predictions(images, masks, outputs, save_path, epoch+1, i)
 
         val_loss /= len(val_loader)
