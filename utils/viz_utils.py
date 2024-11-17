@@ -57,7 +57,7 @@ def visualize_predictions(images, masks, outputs, save_path, epoch, batch_idx):
     
     # Save the visualization as a PNG file
     plt.tight_layout()
-    plt.savefig(os.path.join(save_path, f'epoch_{epoch}_batch_{batch_idx}_predictions.png'))
+    plt.savefig(os.path.join(save_path, "pred_images" ,f'epoch_{epoch}_batch_{batch_idx}_predictions.png'))
     plt.close()
 
 def plot_train_val_history(train_loss_history, val_loss_history, plot_dir, args):
@@ -88,7 +88,7 @@ def plot_train_val_history(train_loss_history, val_loss_history, plot_dir, args)
 
     # Save the plot as a JPEG file
     plt.tight_layout()
-    plt.savefig(os.path.join(plot_dir, f'{args.exp_id}_loss_curve.jpg'))
+    plt.savefig(os.path.join(plot_dir, 'plots' ,f'{args.exp_id}_loss_curve.jpg'))
     plt.close()
 
 
@@ -121,5 +121,5 @@ def plot_metric(x, label, plot_dir, args, metric):
 
     # Save the plot as a JPEG file
     plt.tight_layout()
-    plt.savefig(os.path.join(plot_dir, f'{args.exp_id}_{metric}_curve.jpg'))
+    plt.savefig(os.path.join(plot_dir, 'plots' , f'{args.exp_id}_{metric}_curve.jpg'))
     plt.close()
