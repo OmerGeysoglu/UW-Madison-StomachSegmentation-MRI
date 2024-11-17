@@ -56,7 +56,7 @@ def test_model(model, test_dataloader, args, save_path):
         print(f'Average Loss: {avg_loss:.4f}')
 
         # Save the Dice coefficient history plot
-        plot_metric(dice_coef_history, 'Dice Coefficient', save_path, args, 'dice_coef')
+        plot_metric(dice_coef_history, 'Test Dice Coefficient', save_path, args, 'test_dice_coef')
 
 
 
