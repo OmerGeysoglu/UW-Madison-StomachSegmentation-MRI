@@ -75,11 +75,14 @@ class MadisonStomach(Dataset):
         img = self.transform(img)
         mask = self.mask_transform(mask)
 
+        # Data augmentation is disabled by default
+        ''' 
         # Apply data augmentation if enabled
         if self.augment:
             # Set random seed to ensure consistency between image and mask transformations
             torch.manual_seed(42)
             img = self.augmentation_transforms(img)
             mask = self.augmentation_transforms(mask)
+        '''
 
         return img, mask
