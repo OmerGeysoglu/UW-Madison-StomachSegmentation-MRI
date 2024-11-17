@@ -41,7 +41,7 @@ def train_arg_parser():
     parser.add_argument('--device', type=str, default='cuda:0')
     
     # Experiment ID for saving checkpoints and results
-    parser.add_argument('--exp_id', type=str, default='exp/0')
+    parser.add_argument('--exp_id', type=str, default='exp_0')
     
     # Learning rate for the optimizer
     parser.add_argument('--lr', type=float, default=3e-3)  # Corrected default from string to float
@@ -74,7 +74,7 @@ def test_arg_parser():
     parser.add_argument('--model_path', type=str, default='')
     
     # Experiment ID to use latest saved model 
-    parser.add_argument('--exp_id', type=str, default='exp/0')
+    parser.add_argument('--exp_id', type=str, default='exp_0')
     
     args = parser.parse_args()
     return args
