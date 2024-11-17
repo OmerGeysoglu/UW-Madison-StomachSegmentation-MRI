@@ -112,9 +112,16 @@ def plot_metric(x, label, plot_dir, args, metric):
 
     # Plot the metric curve
     plt.figure(figsize=(10, 6))
-    x = x.cpu().numpy()
-    plt.plot(epochs, x, label=label, color='blue')
-    plt.xlabel('Epoch')
+    
+    # Convert list of tensors to numpy array
+    x_numpy = [item.detach().cpu().numpy() if isinstance(item, torch.Tensor) else item for item in x]
+    x_numpy = np.array(x_numpy)  # Ensure the list is converted to a numpy array for plotting
+
+    plt.plot(epochs, x_numpy, label=label, color='blue')
+    if metric == 'dice_coeff':
+        plt.xlabel('Epoch')
+    elif metric == 'test_dice_coef':
+        plt.xlabel('Batch')
     plt.ylabel(label)
     plt.title(f'{label} Curve')
     plt.legend()
