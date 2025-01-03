@@ -10,6 +10,11 @@ The model is trained on a dataset of MRI medical images where each scan is label
 The dataset utilized for training the model consists of annotated MRI scans and is accessible via the following link:
 [Stomach MRI Dataset](https://drive.google.com/file/d/1JNmn7baTgrEBpHu83y5ckYZ6_rUmBgJp/view)
 
+![case2_day3_slice_0045_image](https://github.com/user-attachments/assets/48b954cc-7545-4fe4-9dd2-a6969c979395)
+![case2_day3_slice_0045_mask](https://github.com/user-attachments/assets/b8b8db6f-3611-403a-8a99-51f89437468f)
+
+&emsp;&emsp;&emsp;&emsp;&emsp;&nbsp;&nbsp;&nbsp;MR Image&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&nbsp;&nbsp;Mask
+
 ## Model and Training
 The segmentation model is based on the U-Net architecture, a convolutional network originally designed for biomedical image segmentation. This architecture is well-suited for tasks like ours because it efficiently handles the variability in medical images and provides precise localization of segmented areas. Transfer learning techniques are also employed, utilizing pre-trained models to enhance our model's performance.
 
